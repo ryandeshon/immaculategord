@@ -61,3 +61,7 @@ yarn preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## API info
+I am using the NHL Stats API. Here are the docs:
+`https://gitlab.com/dword4/nhlapi`
