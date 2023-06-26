@@ -19,7 +19,7 @@
       </div>
       <!-- /end Y Teams -->
       <div class="grid col-span-3 grid-cols-3 gap-4">
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"></button>
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="getPlayersID">click</button>
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"></button>
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"></button>
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"></button>
@@ -41,7 +41,8 @@ export default {
     return {
       teams: [],
       xTeams: [],
-      yTeams: []
+      yTeams: [],
+      currentPlayer: null,
     }
   },
   mounted () {
@@ -50,12 +51,40 @@ export default {
         this.teams = response.data.teams
         // get 6 random teams from the list
         this.randomTeams = response.data.teams.sort(() => 0.5 - Math.random()).slice(0, 6)
-        this.xTeams = this.randomTeams.slice(0, 3);
-        this.yTeams = this.randomTeams.slice(3, 6);
+        this.xTeams = this.randomTeams.slice(0, 3)
+        this.yTeams = this.randomTeams.slice(3, 6)
+        this.getPlayersID()
       })
       .catch(error => {
         console.log(error)
       })
+  },
+  methods: {
+    // get players stats
+    getPlayersStats (playerId) {
+      const apiUrl = `https://statsapi.web.nhl.com/api/v1/people/${playerId}/stats?stats=yearByYear`
+
+      fetch(apiUrl)
+        .then(response => {
+          this.players = response.data.roster
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+
+    // get player id
+    getPlayersID (playerName = 'Connor McDavid') {
+      const apiUrl = `https://statsapi.web.nhl.com/api/v1/players?name=${playerName}`
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const playerId = data.data[0].id
+          console.log(`The player ID for ${playerName} is ${playerId}`)
+        })
+        .catch(error => console.error(error))
+    }
   }
 }
 </script>
