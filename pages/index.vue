@@ -20,7 +20,7 @@
         </div>
         <!-- /end Y Teams -->
         <div class="grid col-span-3 grid-cols-3 gap-4">
-          <button id="search-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button id="search-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="showModal = true"></button>
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
@@ -32,32 +32,54 @@
         </div>
       </div>
     </div>
-    <dialog id="modal">
-      <form>
-        <label for="search-input">Search:</label>
-        <input type="text" id="search-input">
-        <button type="submit">Submit</button>
-      </form>
-      <ul id="results">
-        <li v-for="player in searchPlayersResults" :key="player.id">
-          {{ player.firstName }} {{ player.lastName }}
-        </li>
-      </ul>
-    </dialog>
+    <NModal v-model:show="showModal">
+      <NCard
+        style="width: 600px"
+        title="Search for Players"
+        :bordered="false"
+        size="huge"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div class="flex">
+          <n-input v-model:value="searchQuery" placeholder="Search players"></n-input>
+          <n-button @click="submitSearch">Search</n-button>
+        </div>
+
+        <ul id="results">
+          <li v-for="player in searchPlayersResults" :key="player.id" class="flex justify-between">
+            <div class="">
+              <span>{{ player.firstName }} {{ player.lastName }}</span>
+            </div>
+            <NButton @click="getPlayersStats(player.id)">Select</NButton>
+          </li>
+        </ul>
+
+      </NCard>
+    </NModal>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { NButton, NModal, NCard, NInput } from 'naive-ui'
 
 export default {
+  components: {
+    NButton,
+    NModal,
+    NCard,
+    NInput
+  },
   data () {
     return {
+      showModal: false,
+      searchQuery: '',
       teams: [],
       xTeams: [],
       yTeams: [],
       searchPlayersResults: [],
-      currentPlayer: null,
+      currentPlayer: {},
       answers: {}
     }
   },
@@ -75,10 +97,14 @@ export default {
       })
   },
   methods: {
+    submitSearch() {
+      // Call the getPlayers function with the search query
+      this.getPlayers(this.searchQuery)
+    },
     // get player id
     getPlayers (playerQuery) {
       // reset searchPlayersResults
-      this.searchPlayersResults = [];
+      this.searchPlayersResults = []
 
       const apiUrl = `https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${playerQuery}`
 
@@ -117,35 +143,12 @@ export default {
 
       fetch(apiUrl)
         .then(response => {
-          this.players = response.data.roster
+          console.log('🚀 ~ file: index.vue:126 ~ getPlayersStats ~ response:', response)
+          this.currentPlayer = response.data
         })
         .catch(error => {
           console.log(error)
         })
-    },
-    // open modal
-    openSearchModal () {
-      // JavaScript
-      const searchButton = document.getElementById('search-button')
-      const modal = document.getElementById('modal')
-      const searchInput = document.getElementById('search-input')
-
-      searchButton.addEventListener('click', () => {
-        modal.showModal()
-      })
-
-      modal.addEventListener('submit', async (event) => {
-        event.preventDefault()
-        const query = searchInput.value
-        this.getPlayers(query)
-      })
-
-      // Hide modal when user clicks outside of it
-      window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-          modal.close()
-        }
-      })
     }
   }
 }
