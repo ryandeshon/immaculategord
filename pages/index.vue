@@ -1,34 +1,32 @@
 <template>
   <div>
-    <div class="container">
+    <div class="pt-12 sm:pt-24">
       <!-- X teams -->
-      <div class="grid grid-cols-4 gap-4 text-center">
+      <div class="grid grid-cols-4 text-center">
         <div></div>
-        <div class="flex justify-center items-center flex-col border p-10" v-for="team in xTeams" :key="team.id">
+        <div class="flex justify-center items-center flex-col p-5" v-for="team in xTeams" :key="team.id">
           <img class="w-28" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
-          {{ team.name }}
         </div>
       </div>
       <!-- /end X Teams -->
-      <div class="grid grid-cols-4 gap-4 text-center">
+      <div class="grid grid-cols-4 text-center">
         <!-- Y teams -->
-        <div class="grid col-span-1 gap-4">
-          <div class="flex justify-center items-center flex-col border p-10" v-for="team in yTeams" :key="team.id">
+        <div class="grid col-span-1">
+          <div class="flex justify-center items-center flex-col p-5" v-for="team in yTeams" :key="team.id">
             <img class="w-28" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
-            {{ team.name }}
           </div>
         </div>
         <!-- /end Y Teams -->
-        <div class="grid col-span-3 grid-cols-3 gap-4">
-          <button id="search-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="showModal = true"></button>
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+        <div class="grid col-span-3 grid-cols-3 bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-950 overflow-hidden">
+          <button class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button class="border-b bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button class="border-b bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button class="border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button class="border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button class="bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
         </div>
       </div>
     </div>
@@ -97,7 +95,7 @@ export default {
       })
   },
   methods: {
-    submitSearch() {
+    submitSearch () {
       // Call the getPlayers function with the search query
       this.getPlayers(this.searchQuery)
     },
@@ -149,6 +147,11 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    openSearchModal(buttonPosition) {
+      // Code to open search modal
+      console.log(`Opening search modal for button at position ${buttonPosition}`)
+      this.showModal = true
     }
   }
 }
