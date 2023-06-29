@@ -23,7 +23,7 @@
             @click="openSearchModal(index)"
             class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
           >
-            {{ index }}
+            <span v-if="answer">{{ answer.firstName }} {{ answer.lastName }}</span>
           </button>
         </div>
       </div>
@@ -47,7 +47,7 @@
             <div class="">
               <span>{{ player.firstName }} {{ player.lastName }}</span>
             </div>
-            <NButton @click="getPlayersStats(player.id)">Select</NButton>
+            <NButton @click="getPlayersStats(player)">Select</NButton>
           </li>
         </ul>
 
@@ -76,6 +76,7 @@ export default {
       yTeams: [],
       searchPlayersResults: [],
       currentPlayer: {},
+      buttonLocation: null,
       answers: {}
     }
   },
@@ -92,17 +93,17 @@ export default {
         console.log(error)
       })
 
-      this.answers = {
-        0: '',
-        1: '',
-        2: '',
-        3: '',
-        4: '',
-        5: '',
-        6: '',
-        7: '',
-        8: ''
-      }
+    this.answers = {
+      0: {},
+      1: {},
+      2: {},
+      3: {},
+      4: {},
+      5: {},
+      6: {},
+      7: {},
+      8: {}
+    }
     
   },
   methods: {
@@ -147,13 +148,14 @@ export default {
         .catch(error => console.error(error))
     },
     // get players stats
-    getPlayersStats (playerId) {
-      const apiUrl = `https://statsapi.web.nhl.com/api/v1/people/${playerId}/stats?stats=yearByYear`
+    getPlayersStats (player) {
+      const apiUrl = `https://statsapi.web.nhl.com/api/v1/people/${player.id}/stats?stats=yearByYear`
 
       fetch(apiUrl)
         .then(response => {
           console.log('🚀 ~ file: index.vue:126 ~ getPlayersStats ~ response:', response)
           this.currentPlayer = response.data
+          this.answers[this.buttonLocation] = player
         })
         .catch(error => {
           console.log(error)
@@ -162,6 +164,7 @@ export default {
     openSearchModal(buttonPosition) {
       // Code to open search modal
       console.log(`Opening search modal for button at position ${buttonPosition}`)
+      this.buttonLocation = buttonPosition
       this.showModal = true
     },
     addPlayerToSquare(player, square) {
