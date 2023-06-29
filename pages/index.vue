@@ -18,15 +18,13 @@
         </div>
         <!-- /end Y Teams -->
         <div class="grid col-span-3 grid-cols-3 bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-950 overflow-hidden">
-          <button class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="border-b bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="border-b bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
-          <button class="bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4" @click="openSearchModal"></button>
+          <button 
+            v-for="(answer, index) in answers" :key="index" 
+            @click="openSearchModal(index)"
+            class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
+          >
+            {{ index }}
+          </button>
         </div>
       </div>
     </div>
@@ -39,13 +37,13 @@
         role="dialog"
         aria-modal="true"
       >
-        <div class="flex">
-          <n-input v-model:value="searchQuery" placeholder="Search players"></n-input>
+        <div class="flex items-center justify-between mb-3">
+          <n-input v-model:value="searchQuery" placeholder="Search players" class="mr-3"></n-input>
           <n-button @click="submitSearch">Search</n-button>
         </div>
 
         <ul id="results">
-          <li v-for="player in searchPlayersResults" :key="player.id" class="flex justify-between">
+          <li v-for="player in searchPlayersResults" :key="player.id" class="flex items-center justify-between pb-1">
             <div class="">
               <span>{{ player.firstName }} {{ player.lastName }}</span>
             </div>
@@ -93,6 +91,19 @@ export default {
       .catch(error => {
         console.log(error)
       })
+
+      this.answers = {
+        0: '',
+        1: '',
+        2: '',
+        3: '',
+        4: '',
+        5: '',
+        6: '',
+        7: '',
+        8: ''
+      }
+    
   },
   methods: {
     submitSearch () {
@@ -152,7 +163,11 @@ export default {
       // Code to open search modal
       console.log(`Opening search modal for button at position ${buttonPosition}`)
       this.showModal = true
-    }
+    },
+    addPlayerToSquare(player, square) {
+      // Code to add player to square
+      console.log(`Adding player ${player} to square ${square}`)
+    },
   }
 }
 </script>
