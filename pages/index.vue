@@ -24,7 +24,10 @@
             @click="openSearchModal(index)"
             class="border bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4 h-35 w-35"
           >
-            <span v-if="answer">{{ answer.firstName }} {{ answer.lastName }}</span>
+            <div v-if="answer.id">
+              <img class="w-full rounded-lg" :src="`https://cms.nhl.bamgrid.com/images/headshots/current/168x168/${answer.id}.jpg`" :alt="answer.name" />
+              <span>{{ answer.firstName }} {{ answer.lastName }}</span>
+            </div>
           </button>
         </div>
         <div class="col-span-1 sm:w-36 md:w-48 h-full flex justify-center">
