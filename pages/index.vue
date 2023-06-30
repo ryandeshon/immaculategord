@@ -17,17 +17,18 @@
           </div>
         </div>
         <!-- /end Y Teams -->
-        <div class="grid col-span-3 grid-cols-3 bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-950 overflow-hidden">
-          <button 
+        <div class="grid col-span-3 grid-cols-3 rounded-xl border-2 border-white overflow-hidden">
+          <button
             v-for="(answer, index) in answers" :key="index"
             @click="openSearchModal(index)"
-            class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
+            class="border bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
           >
             <span v-if="answer">{{ answer.firstName }} {{ answer.lastName }}</span>
           </button>
         </div>
       </div>
     </div>
+
     <NModal v-model:show="showModal">
       <NCard
         style="width: 600px"
@@ -105,6 +106,8 @@ export default {
       8: {}
     }
   },
+  computed: {
+  },
   methods: {
     submitSearch () {
       // Call the getPlayers function with the search query
@@ -149,33 +152,56 @@ export default {
     // get players stats
     getPlayersStats (player) {
       const apiUrl = `https://statsapi.web.nhl.com/api/v1/people/${player.id}/stats?stats=yearByYear`
-      this.currentPlayer = player;
+      this.currentPlayer = player
       fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-          Object.assign(this.currentPlayer, data.stats[0]);
+          const statsData = data.stats[0]
+          console.log('🚀 ~ file: index.vue:160 ~ getPlayersStats ~ statsData:', statsData)
+          const statsObject = {}
+          statsObject.nhlTeams = this.getPlayersTeams(statsData)
+          statsObject.careerStats = this.getPlayersCareerStats(statsData)
+          return statsObject
         })
-        .then(() => {
-          this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
-          //is the player on a team?
-          // this.isPlayerOnTeam(this.currentPlayer, this.xTeams[0].name)
+        .then((statsObject) => {
+          Object.assign(this.currentPlayer, statsObject)
         })
         .catch(error => {
           console.log(error)
         })
     },
-    isPlayerOnTeam (player, teams) {
-      // Code to check if player is on team
-      console.log(`Checking if player ${player} is on team ${team}`)
-      if (player.team === team) {
-        return true
-      } else {
-        return false
+    getPlayersTeams (stats) {
+      const playerTeams = []
+      stats.splits.forEach((season) => {
+        if (season.league.name === 'National Hockey League') {
+          playerTeams.push(season.team.name)
+        }
+      })
+      return playerTeams
+    },
+    getPlayersCareerStats (stats) {
+      const careerStats = {
+        games: 0,
+        goals: 0,
+        assists: 0,
+        points: 0,
+        powerPlayPoints: 0,
+        shots: 0
       }
+      stats.splits.forEach((season) => {
+        if (season.league.name === 'National Hockey League') {
+          careerStats.games += season.stat.games
+          careerStats.goals += season.stat.goals
+          careerStats.assists += season.stat.assists
+          careerStats.points += season.stat.points
+          careerStats.powerPlayPoints += season.stat.powerPlayPoints
+          careerStats.shots += season.stat.shots
+        }
+      })
+      console.log('🚀 ~ file: index.vue:196 ~ getPlayersCareerStats ~ careerStats:', careerStats)
+      return careerStats
     },
     openSearchModal (buttonPosition) {
-      // Code to open search modal
-      console.log(`Opening search modal for button at position ${buttonPosition}`)
       this.buttonLocation = buttonPosition
       this.showModal = true
     },
@@ -184,7 +210,7 @@ export default {
       this.resetModal()
     },
     resetModal () {
-      this.currentPlayer = {}
+      // this.currentPlayer = {}
       this.showModal = false
       this.searchPlayersResults = []
       this.searchQuery = ''
