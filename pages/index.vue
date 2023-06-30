@@ -177,7 +177,8 @@ export default {
           playerTeams.push(season.team.name)
         }
       })
-      return playerTeams
+      const uniqueTeams = [...new Set(playerTeams)]
+      return uniqueTeams
     },
     getPlayersCareerStats (stats) {
       const careerStats = {
