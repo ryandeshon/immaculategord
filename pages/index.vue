@@ -107,7 +107,7 @@ export default {
         7: {},
         8: {}
       },
-      guesses: 9
+      guesses: null
     }
   },
   mounted () {
@@ -117,6 +117,13 @@ export default {
       this.yTeams = JSON.parse(localStorage.getItem('yTeams'))
     } else {
       this.getRandomTeams()
+    }
+    // get guesses from local storage if they exist
+    if (localStorage.getItem('guesses')) {
+      this.guesses = JSON.parse(localStorage.getItem('guesses'))
+    } else {
+      this.guesses = 9
+      localStorage.setItem('guesses', 9)
     }
   },
   computed: {
@@ -249,6 +256,7 @@ export default {
         this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
       } else {
         this.guesses--
+        localStorage.setItem('guesses', this.guesses)
         this.resetPlayer()
         alert('Player is not on the selected teams')
       }
