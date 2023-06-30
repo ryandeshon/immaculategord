@@ -87,13 +87,13 @@ export default {
       yTeams: [],
       gridLocations: {
         0: '0,0',
-        1: '0,1',
-        2: '0,2',
-        3: '1,0',
+        1: '1,0',
+        2: '2,0',
+        3: '0,1',
         4: '1,1',
-        5: '1,2',
-        6: '2,0',
-        7: '2,1',
+        5: '2,1',
+        6: '0,2',
+        7: '1,2',
         8: '2,2'
       },
       searchPlayersResults: [],
@@ -127,6 +127,10 @@ export default {
     } else {
       this.guesses = 9
       localStorage.setItem('guesses', 9)
+    }
+    // get answers from local storage if they exist
+    if (localStorage.getItem('answers')) {
+      this.answers = JSON.parse(localStorage.getItem('answers'))
     }
   },
   computed: {
@@ -256,7 +260,9 @@ export default {
       const getXTeam = this.xTeams[getSquare.split(',')[0]].name
       const getYTeam = this.yTeams[getSquare.split(',')[1]].name
       if ( this.isPlayerOnTeam([getXTeam, getYTeam])) {
+        // add answers to local storage
         this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
+        localStorage.setItem('answers', JSON.stringify(this.answers))
       } else {
         this.guesses--
         localStorage.setItem('guesses', this.guesses)
@@ -265,6 +271,7 @@ export default {
       }
     },
     isPlayerOnTeam (teams) {
+      console.log('🚀 ~ file: index.vue:274 ~ isPlayerOnTeam ~ teams:', teams)
       const playerTeams = this.currentPlayer.nhlTeams
       console.log('🚀 ~ file: index.vue:239 ~ isPlayerOnTeam ~ playerTeams:', playerTeams)
       const isPlayerOnTeam = teams.every(team => playerTeams.includes(team))
