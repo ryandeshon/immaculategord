@@ -48,7 +48,7 @@
             <div class="">
               <span>{{ player.firstName }} {{ player.lastName }}</span>
             </div>
-            <NButton @click="getPlayersStats(player)">Select</NButton>
+            <NButton @click="getPlayer(player)">Select</NButton>
           </li>
         </ul>
 
@@ -78,7 +78,7 @@ export default {
       searchPlayersResults: [],
       currentPlayer: {},
       buttonLocation: null,
-      answers: {}
+      answers: {},
     }
   },
   mounted () {
@@ -149,6 +149,11 @@ export default {
         })
         .catch(error => console.error(error))
     },
+    getPlayer (player) {
+      // get player stats
+      this.getPlayersStats(player)
+      this.checkSquareAnswer()
+    },
     // get players stats
     getPlayersStats (player) {
       const apiUrl = `https://statsapi.web.nhl.com/api/v1/people/${player.id}/stats?stats=yearByYear`
@@ -202,13 +207,21 @@ export default {
       console.log('🚀 ~ file: index.vue:196 ~ getPlayersCareerStats ~ careerStats:', careerStats)
       return careerStats
     },
-    openSearchModal (buttonPosition) {
-      this.buttonLocation = buttonPosition
-      this.showModal = true
+    checkIfPlayerIsAlreadySelected (player) {
+      const playerAlreadySelected = Object.values(this.answers).includes(player)
+      return playerAlreadySelected
+    },
+    checkSquareAnswer () {
+      
+      this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
     },
     addPlayerToSquare (player, square) {
       this.answers[square] = player
       this.resetModal()
+    },
+    openSearchModal (buttonPosition) {
+      this.buttonLocation = buttonPosition
+      this.showModal = true
     },
     resetModal () {
       // this.currentPlayer = {}
