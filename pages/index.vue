@@ -4,16 +4,16 @@
       <!-- X teams -->
       <div class="grid grid-cols-5 text-center">
         <div class="col-span-1"></div>
-        <div class="flex justify-center items-center flex-col p-5" v-for="team in xTeams" :key="team.id">
-          <img class="w-28" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
+        <div class="flex justify-center items-center flex-col p-5 h-35 w-35" v-for="team in xTeams" :key="team.id">
+          <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
         </div>
       </div>
       <!-- /end X Teams -->
       <div class="grid grid-cols-5 text-center">
         <!-- Y teams -->
         <div class="grid col-span-1">
-          <div class="flex justify-center items-center flex-col p-5" v-for="team in yTeams" :key="team.id">
-            <img class="w-28" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
+          <div class="flex justify-center items-center flex-col p-5 h-35 w-35" v-for="team in yTeams" :key="team.id">
+            <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
           </div>
         </div>
         <!-- /end Y Teams -->
@@ -22,7 +22,7 @@
             v-for="(answer, index) in answers" :key="index"
             :id="`square-${index}`"
             @click="openSearchModal(index)"
-            class="border bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
+            class="border bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4 h-35 w-35"
           >
             <span v-if="answer">{{ answer.firstName }} {{ answer.lastName }}</span>
           </button>
