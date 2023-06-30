@@ -20,6 +20,7 @@
         <div class="grid col-span-3 grid-cols-3 rounded-xl border-2 border-white overflow-hidden">
           <button
             v-for="(answer, index) in answers" :key="index"
+            :id="`square-${index}`"
             @click="openSearchModal(index)"
             class="border bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
           >
@@ -75,10 +76,31 @@ export default {
       teams: [],
       xTeams: [],
       yTeams: [],
+      gridLocations: {
+        0: '0,0',
+        1: '0,1',
+        2: '0,2',
+        3: '1,0',
+        4: '1,1',
+        5: '1,2',
+        6: '2,0',
+        7: '2,1',
+        8: '2,2'
+      },
       searchPlayersResults: [],
       currentPlayer: {},
       buttonLocation: null,
-      answers: {},
+      answers: {
+        0: {},
+        1: {},
+        2: {},
+        3: {},
+        4: {},
+        5: {},
+        6: {},
+        7: {},
+        8: {}
+      }
     }
   },
   mounted () {
@@ -93,18 +115,6 @@ export default {
       .catch(error => {
         console.log(error)
       })
-
-    this.answers = {
-      0: {},
-      1: {},
-      2: {},
-      3: {},
-      4: {},
-      5: {},
-      6: {},
-      7: {},
-      8: {}
-    }
   },
   computed: {
   },
@@ -152,7 +162,6 @@ export default {
     getPlayer (player) {
       // get player stats
       this.getPlayersStats(player)
-      this.checkSquareAnswer()
     },
     // get players stats
     getPlayersStats (player) {
@@ -170,6 +179,9 @@ export default {
         })
         .then((statsObject) => {
           Object.assign(this.currentPlayer, statsObject)
+        })
+        .then(() => {
+          this.checkSquareAnswer()
         })
         .catch(error => {
           console.log(error)
@@ -212,8 +224,22 @@ export default {
       return playerAlreadySelected
     },
     checkSquareAnswer () {
-      
-      this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
+      const getSquare = this.gridLocations[this.buttonLocation]
+      const getXTeam = this.xTeams[getSquare.split(',')[0]].name
+      const getYTeam = this.yTeams[getSquare.split(',')[1]].name
+      if ( this.isPlayerOnTeam([getXTeam, getYTeam])) {
+        this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
+      } else {
+        this.resetModal()
+        alert('Player is not on the selected teams')
+      }
+    },
+    isPlayerOnTeam (teams) {
+      const playerTeams = this.currentPlayer.nhlTeams
+      console.log('🚀 ~ file: index.vue:239 ~ isPlayerOnTeam ~ playerTeams:', playerTeams)
+      const isPlayerOnTeam = teams.every(team => playerTeams.includes(team))
+      console.log('🚀 ~ file: index.vue:240 ~ isPlayerOnTeam ~ isPlayerOnTeam:', isPlayerOnTeam)
+      return isPlayerOnTeam
     },
     addPlayerToSquare (player, square) {
       this.answers[square] = player
