@@ -19,7 +19,7 @@
         <!-- /end Y Teams -->
         <div class="grid col-span-3 grid-cols-3 bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-950 overflow-hidden">
           <button 
-            v-for="(answer, index) in answers" :key="index" 
+            v-for="(answer, index) in answers" :key="index"
             @click="openSearchModal(index)"
             class="border-b border-r bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
           >
@@ -104,7 +104,6 @@ export default {
       7: {},
       8: {}
     }
-    
   },
   methods: {
     submitSearch () {
@@ -150,27 +149,46 @@ export default {
     // get players stats
     getPlayersStats (player) {
       const apiUrl = `https://statsapi.web.nhl.com/api/v1/people/${player.id}/stats?stats=yearByYear`
-
+      this.currentPlayer = player;
       fetch(apiUrl)
-        .then(response => {
-          console.log('🚀 ~ file: index.vue:126 ~ getPlayersStats ~ response:', response)
-          this.currentPlayer = response.data
-          this.answers[this.buttonLocation] = player
+        .then(response => response.json())
+        .then(data => {
+          Object.assign(this.currentPlayer, data.stats[0]);
+        })
+        .then(() => {
+          this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
+          //is the player on a team?
+          // this.isPlayerOnTeam(this.currentPlayer, this.xTeams[0].name)
         })
         .catch(error => {
           console.log(error)
         })
     },
-    openSearchModal(buttonPosition) {
+    isPlayerOnTeam (player, teams) {
+      // Code to check if player is on team
+      console.log(`Checking if player ${player} is on team ${team}`)
+      if (player.team === team) {
+        return true
+      } else {
+        return false
+      }
+    },
+    openSearchModal (buttonPosition) {
       // Code to open search modal
       console.log(`Opening search modal for button at position ${buttonPosition}`)
       this.buttonLocation = buttonPosition
       this.showModal = true
     },
-    addPlayerToSquare(player, square) {
-      // Code to add player to square
-      console.log(`Adding player ${player} to square ${square}`)
+    addPlayerToSquare (player, square) {
+      this.answers[square] = player
+      this.resetModal()
     },
+    resetModal () {
+      this.currentPlayer = {}
+      this.showModal = false
+      this.searchPlayersResults = []
+      this.searchQuery = ''
+    }
   }
 }
 </script>
