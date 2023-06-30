@@ -2,14 +2,14 @@
   <div>
     <div class="pt-12 sm:pt-24">
       <!-- X teams -->
-      <div class="grid grid-cols-4 text-center">
-        <div></div>
+      <div class="grid grid-cols-5 text-center">
+        <div class="col-span-1"></div>
         <div class="flex justify-center items-center flex-col p-5" v-for="team in xTeams" :key="team.id">
           <img class="w-28" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
         </div>
       </div>
       <!-- /end X Teams -->
-      <div class="grid grid-cols-4 text-center">
+      <div class="grid grid-cols-5 text-center">
         <!-- Y teams -->
         <div class="grid col-span-1">
           <div class="flex justify-center items-center flex-col p-5" v-for="team in yTeams" :key="team.id">
@@ -26,6 +26,12 @@
           >
             <span v-if="answer">{{ answer.firstName }} {{ answer.lastName }}</span>
           </button>
+        </div>
+        <div class="col-span-1 sm:w-36 md:w-48 h-full flex justify-center">
+          <div class="flex flex-col justify-center items-center">
+            <span class="text-2xl font-bold">{{ guesses }}</span>
+            <span class="text-sm">Guesses</span>
+          </div>
         </div>
       </div>
     </div>
@@ -100,25 +106,37 @@ export default {
         6: {},
         7: {},
         8: {}
-      }
+      },
+      guesses: 9
     }
   },
   mounted () {
-    axios.get('https://statsapi.web.nhl.com/api/v1/teams')
-      .then(response => {
-        this.teams = response.data.teams
-        // get 6 random teams from the list
-        this.randomTeams = response.data.teams.sort(() => 0.5 - Math.random()).slice(0, 6)
-        this.xTeams = this.randomTeams.slice(0, 3)
-        this.yTeams = this.randomTeams.slice(3, 6)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    // get teams from local storage if they exist
+    if (localStorage.getItem('xTeams') && localStorage.getItem('yTeams')) {
+      this.xTeams = JSON.parse(localStorage.getItem('xTeams'))
+      this.yTeams = JSON.parse(localStorage.getItem('yTeams'))
+    } else {
+      this.getRandomTeams()
+    }
   },
   computed: {
   },
   methods: {
+    getRandomTeams () {
+      axios.get('https://statsapi.web.nhl.com/api/v1/teams')
+        .then(response => {
+          this.teams = response.data.teams
+          // get 6 random teams from the list
+          this.randomTeams = response.data.teams.sort(() => 0.5 - Math.random()).slice(0, 6)
+          this.xTeams = this.randomTeams.slice(0, 3)
+          this.yTeams = this.randomTeams.slice(3, 6)
+          localStorage.setItem('xTeams', JSON.stringify(this.xTeams))
+          localStorage.setItem('yTeams', JSON.stringify(this.yTeams))
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     submitSearch () {
       // Call the getPlayers function with the search query
       this.getPlayers(this.searchQuery)
@@ -230,7 +248,8 @@ export default {
       if ( this.isPlayerOnTeam([getXTeam, getYTeam])) {
         this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
       } else {
-        this.resetModal()
+        this.guesses--
+        this.resetPlayer()
         alert('Player is not on the selected teams')
       }
     },
@@ -249,8 +268,11 @@ export default {
       this.buttonLocation = buttonPosition
       this.showModal = true
     },
+    resetPlayer () {
+      this.currentPlayer = {}
+    },
     resetModal () {
-      // this.currentPlayer = {}
+      this.currentPlayer = {}
       this.showModal = false
       this.searchPlayersResults = []
       this.searchQuery = ''
