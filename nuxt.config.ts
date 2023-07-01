@@ -1,4 +1,5 @@
 export default defineNuxtConfig({
+  ssr: false,
   devtools: { enabled: true },
   runtimeConfig: {
     // The private keys which are only available server-side

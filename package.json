@@ -2,13 +2,14 @@
   "name": "nuxt-app",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "build": "nuxi build",
+    "dev": "nuxi dev",
+    "generate": "nuxi generate",
+    "preview": "nuxi preview",
+    "postinstall": "nuxi prepare"
   },
   "devDependencies": {
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-28135555.f3f838f",
     "@nuxt/devtools": "^0.6.6",
     "@nuxtjs/tailwindcss": "^6.8.0",
     "@types/node": "^18",
