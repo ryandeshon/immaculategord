@@ -41,16 +41,18 @@
 
     <NModal v-model:show="showModal">
       <NCard
-        style="width: 600px"
-        title="Search for Players"
+        style="width: 600px;"
         :bordered="false"
         size="huge"
         role="dialog"
         aria-modal="true"
+        on-after-leave="resetModal"
       >
         <div class="flex items-center justify-between mb-3">
-          <n-input v-model:value="searchQuery" placeholder="Search players" class="mr-3"></n-input>
-          <n-button @click="submitSearch">Search</n-button>
+          <NInputGroup>
+            <NInput v-model:value="searchQuery" placeholder="Search players" @keyup.enter="submitSearch"></NInput>
+            <NButton ref="searchButton" @click="submitSearch">Search</NButton>
+          </NInputGroup>
         </div>
 
         <ul id="results">
@@ -59,6 +61,7 @@
               <span>{{ player.firstName }} {{ player.lastName }}</span>
             </div>
             <NButton
+              :key="index"
               v-if="checkIfPlayerIsAlreadySelected(player)"
               @click="getPlayer(player)"
             >
@@ -74,14 +77,15 @@
 
 <script>
 import axios from 'axios'
-import { NButton, NModal, NCard, NInput } from 'naive-ui'
+import { NButton, NModal, NCard, NInput, NInputGroup } from 'naive-ui'
 
 export default {
   components: {
     NButton,
     NModal,
     NCard,
-    NInput
+    NInput,
+    NInputGroup
   },
   data () {
     return {
@@ -257,11 +261,12 @@ export default {
       return careerStats
     },
     checkIfPlayerIsAlreadySelected (player) {
+      console.log('🚀 ~ file: index.vue:261 ~ checkIfPlayerIsAlreadySelected')
       // check to see if player is already one of the answers
       const playerIsAnswer = Object.values(this.answers).some((answer) => {
         return answer.id === player.id
       })
-      return playerIsAnswer
+      return !playerIsAnswer
     },
     checkSquareAnswer () {
       const getSquare = this.gridLocations[this.buttonLocation]
@@ -298,6 +303,7 @@ export default {
       this.currentPlayer = {}
     },
     resetModal () {
+      console.log('close modal')
       this.currentPlayer = {}
       this.showModal = false
       this.searchPlayersResults = []
