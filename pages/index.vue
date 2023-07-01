@@ -1,23 +1,24 @@
 <template>
   <div>
+
     <div class="pt-12 sm:pt-24">
       <!-- X teams -->
-      <div class="grid grid-cols-5 text-center">
+      <div class="grid grid-cols-5 auto-rows-fr text-center">
         <div class="col-span-1"></div>
         <div class="flex justify-center items-center flex-col p-5 h-35 w-35" v-for="team in xTeams" :key="team.id">
           <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
         </div>
       </div>
       <!-- /end X Teams -->
-      <div class="grid grid-cols-5 text-center">
+      <div class="grid grid-cols-5 auto-rows-fr text-center">
         <!-- Y teams -->
-        <div class="grid col-span-1">
+        <div class="grid col-span-1 auto-rows-fr">
           <div class="flex justify-center items-center flex-col p-5 h-35 w-35" v-for="team in yTeams" :key="team.id">
             <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
           </div>
         </div>
         <!-- /end Y Teams -->
-        <div class="grid col-span-3 grid-cols-3 rounded-xl border-2 border-white overflow-hidden">
+        <div class="grid col-span-3 grid-cols-3 auto-rows-fr rounded-xl border-2 border-white overflow-hidden">
           <button
             v-for="(answer, index) in answers" :key="index"
             :id="`square-${index}`"
