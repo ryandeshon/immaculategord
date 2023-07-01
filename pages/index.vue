@@ -32,7 +32,7 @@
         </div>
         <div class="col-span-1 sm:w-36 md:w-48 h-full flex justify-center">
           <div class="flex flex-col justify-center items-center">
-            <span class="text-2xl font-bold">{{ guesses }}</span>
+            <span class="text-6xl font-bold">{{ guesses }}</span>
             <span class="text-sm">Guesses</span>
           </div>
         </div>
