@@ -55,8 +55,15 @@
           </NInputGroup>
         </div>
 
-        <ul id="results">
-          <li v-for="player in searchPlayersResults" :key="player.id" class="flex items-center justify-between pb-1">
+        <ul
+          v-if="searchPlayersResults.length > 0"
+          id="results"
+        >
+          <li 
+            v-for="player in searchPlayersResults"
+            :key="player.id"
+            class="flex items-center justify-between pb-1"
+          >
             <div class="">
               <span>{{ player.firstName }} {{ player.lastName }}</span>
             </div>
@@ -69,6 +76,7 @@
             </NButton>
           </li>
         </ul>
+        <h3 v-else-if="noResults">No results found</h3>
 
       </NCard>
     </NModal>
@@ -90,6 +98,7 @@ export default {
   data () {
     return {
       showModal: false,
+      noResults: false,
       searchQuery: '',
       teams: [],
       xTeams: [],
@@ -175,6 +184,11 @@ export default {
         .then(response => response.json())
         .then(data => {
           const playerSuggestions = data.suggestions
+          if (playerSuggestions.length === 0) {
+            this.noResults = true
+          } else {
+            this.noResults = false
+          }
           playerSuggestions.forEach((player) => {
             const playerArray = player.split('|')
             const playerObject = {
@@ -308,6 +322,7 @@ export default {
       this.showModal = false
       this.searchPlayersResults = []
       this.searchQuery = ''
+      this.noResults = false
     }
   }
 }
