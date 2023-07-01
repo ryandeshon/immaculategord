@@ -1,7 +1,6 @@
 <template>
   <div>
-
-    <div class="pt-12 sm:pt-24">
+    <div class="">
       <!-- X teams -->
       <div class="grid grid-cols-5 auto-rows-fr text-center">
         <div class="col-span-1"></div>
@@ -59,7 +58,12 @@
             <div class="">
               <span>{{ player.firstName }} {{ player.lastName }}</span>
             </div>
-            <NButton @click="getPlayer(player)">Select</NButton>
+            <NButton
+              v-if="checkIfPlayerIsAlreadySelected(player)"
+              @click="getPlayer(player)"
+            >
+              Select
+            </NButton>
           </li>
         </ul>
 
@@ -253,8 +257,11 @@ export default {
       return careerStats
     },
     checkIfPlayerIsAlreadySelected (player) {
-      const playerAlreadySelected = Object.values(this.answers).includes(player)
-      return playerAlreadySelected
+      // check to see if player is already one of the answers
+      const playerIsAnswer = Object.values(this.answers).some((answer) => {
+        return answer.id === player.id
+      })
+      return playerIsAnswer
     },
     checkSquareAnswer () {
       const getSquare = this.gridLocations[this.buttonLocation]
