@@ -23,6 +23,7 @@ jobs:
 
       - name: Build
         run: npm run build
+        run: npm run generate
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -34,6 +35,6 @@ jobs:
       - name: Deploy to S3
         run: |
           aws s3 rm s3://${{ secrets.AWS_S3_BUCKET }}/ --recursive
-          aws s3 cp ./.output s3://${{ secrets.AWS_S3_BUCKET }} --recursive  # adjust `./.output` to your build output directory if different
+          aws s3 cp ./dist s3://${{ secrets.AWS_S3_BUCKET }} --recursive  # adjust `./dist` to your build output directory if different
           aws configure set preview.cloudfront true
           aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
