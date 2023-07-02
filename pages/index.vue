@@ -4,7 +4,7 @@
       <!-- X teams -->
       <div class="grid grid-cols-5 auto-rows-fr text-center">
         <div class="col-span-1"></div>
-        <div class="flex justify-center items-center flex-col p-5 h-35 w-35" v-for="team in xTeams" :key="team.id">
+        <div class="flex justify-center items-center flex-col p-5" v-for="team in xTeams" :key="team.id">
           <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
         </div>
       </div>
@@ -12,7 +12,7 @@
       <div class="grid grid-cols-5 auto-rows-fr text-center">
         <!-- Y teams -->
         <div class="grid col-span-1 auto-rows-fr">
-          <div class="flex justify-center items-center flex-col p-5 h-35 w-35" v-for="team in yTeams" :key="team.id">
+          <div class="flex justify-center items-center flex-col p-5" v-for="team in yTeams" :key="team.id">
             <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
           </div>
         </div>
@@ -22,7 +22,7 @@
             v-for="(answer, index) in answers" :key="index"
             :id="`square-${index}`"
             @click="openSearchModal(index)"
-            class="border bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4 h-35 w-35"
+            class="border bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
           >
             <div v-if="answer.id">
               <img class="w-full rounded-lg" :src="`https://cms.nhl.bamgrid.com/images/headshots/current/168x168/${answer.id}.jpg`" :alt="answer.name" />
@@ -30,7 +30,7 @@
             </div>
           </button>
         </div>
-        <div class="col-span-1 sm:w-36 md:w-48 h-full flex justify-center">
+        <div class="col-span-1 h-full flex justify-center">
           <div class="flex flex-col justify-center items-center">
             <span class="text-6xl font-bold">{{ guesses }}</span>
             <span class="text-sm">Guesses</span>
@@ -59,7 +59,7 @@
           v-if="searchPlayersResults.length > 0"
           id="results"
         >
-          <li 
+          <li
             v-for="player in searchPlayersResults"
             :key="player.id"
             class="flex items-center justify-between pb-1"
@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     getRandomTeams () {
-      this.$axios.get('https://statsapi.web.nhl.com/api/v1/teams')
+      useFetch.get('https://statsapi.web.nhl.com/api/v1/teams')
         .then(response => {
           this.teams = response.data.teams
           // get 6 random teams from the list
@@ -174,11 +174,15 @@ export default {
     },
     // get player id
     getPlayers (playerQuery) {
+      console.log('🚀 ~ file: index.vue:177 ~ getPlayers ~ playerQuery:', playerQuery)
       // reset searchPlayersResults
       this.searchPlayersResults = []
 
-      this.$axios(`nhl/${playerQuery}`)
-        .then(response => response.json())
+      $fetch(`nhlPlayers/${playerQuery}`)
+        .then(response => {
+          console.log('🚀 ~ file: index.vue:185 ~ getPlayers ~ response:', response)
+          return response
+        })
         .then(data => {
           const playerSuggestions = data.suggestions
           if (playerSuggestions.length === 0) {
