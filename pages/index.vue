@@ -292,11 +292,11 @@ export default {
         this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
         localStorage.setItem('answers', JSON.stringify(this.answers))
       } else {
-        this.guesses--
-        localStorage.setItem('guesses', this.guesses)
         this.resetPlayer()
         alert('Player is not on the selected teams')
       }
+      this.guesses--
+      localStorage.setItem('guesses', this.guesses)
     },
     isPlayerOnTeam (teams) {
       console.log('🚀 ~ file: index.vue:274 ~ isPlayerOnTeam ~ teams:', teams)
