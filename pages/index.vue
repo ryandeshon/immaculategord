@@ -5,7 +5,7 @@
       <div class="grid grid-cols-4 md:grid-cols-5 auto-rows-fr text-center">
         <div class="col-span-1"></div>
         <div class="flex justify-center items-center flex-col p-5" v-for="team in xTeams" :key="team.id">
-          <img class="" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
+          <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
         </div>
       </div>
       <!-- /end X Teams -->
@@ -13,7 +13,7 @@
         <!-- Y teams -->
         <div class="grid col-span-1 auto-rows-fr">
           <div class="flex justify-center items-center flex-col p-5" v-for="team in yTeams" :key="team.id">
-            <img class="" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
+            <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
           </div>
         </div>
         <!-- /end Y Teams -->
