@@ -10,5 +10,22 @@ export default defineNuxtConfig({
     }
   },
   css: ["@/assets/css/styles.css"],
-  modules: ['@nuxtjs/tailwindcss']
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/tailwindcss'
+  ],
+  axios: {
+    proxy: true
+  },
+  proxy: {
+    '/nhl': {
+      target: 'https://suggest.svc.nhl.com',
+      pathRewrite: {
+        '^/nhl': '/svc/suggest/v1/minplayers'
+      },
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      }
+    }
+  }
 })

@@ -84,7 +84,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { NButton, NModal, NCard, NInput, NInputGroup } from 'naive-ui'
 
 export default {
@@ -155,7 +154,7 @@ export default {
   },
   methods: {
     getRandomTeams () {
-      axios.get('https://statsapi.web.nhl.com/api/v1/teams')
+      this.$axios.get('https://statsapi.web.nhl.com/api/v1/teams')
         .then(response => {
           this.teams = response.data.teams
           // get 6 random teams from the list
@@ -178,9 +177,7 @@ export default {
       // reset searchPlayersResults
       this.searchPlayersResults = []
 
-      const apiUrl = `https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${playerQuery}`
-
-      fetch(apiUrl)
+      this.$axios(`nhl/${playerQuery}`)
         .then(response => response.json())
         .then(data => {
           const playerSuggestions = data.suggestions
@@ -286,7 +283,7 @@ export default {
       const getSquare = this.gridLocations[this.buttonLocation]
       const getXTeam = this.xTeams[getSquare.split(',')[0]].name
       const getYTeam = this.yTeams[getSquare.split(',')[1]].name
-      if ( this.isPlayerOnTeam([getXTeam, getYTeam])) {
+      if (this.isPlayerOnTeam([getXTeam, getYTeam])) {
         // add answers to local storage
         this.addPlayerToSquare(this.currentPlayer, this.buttonLocation)
         localStorage.setItem('answers', JSON.stringify(this.answers))
