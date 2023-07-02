@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     getRandomTeams () {
-      useFetch.get('https://statsapi.web.nhl.com/api/v1/teams')
+      $fetch('https://statsapi.web.nhl.com/api/v1/teams')
         .then(response => {
           this.teams = response.data.teams
           // get 6 random teams from the list
