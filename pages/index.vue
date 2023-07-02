@@ -2,18 +2,18 @@
   <div>
     <div class="">
       <!-- X teams -->
-      <div class="grid grid-cols-5 auto-rows-fr text-center">
+      <div class="grid grid-cols-4 md:grid-cols-5 auto-rows-fr text-center">
         <div class="col-span-1"></div>
         <div class="flex justify-center items-center flex-col p-5" v-for="team in xTeams" :key="team.id">
-          <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
+          <img class="" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
         </div>
       </div>
       <!-- /end X Teams -->
-      <div class="grid grid-cols-5 auto-rows-fr text-center">
+      <div class="grid grid-cols-4 md:grid-cols-5 auto-rows-fr text-center">
         <!-- Y teams -->
         <div class="grid col-span-1 auto-rows-fr">
           <div class="flex justify-center items-center flex-col p-5" v-for="team in yTeams" :key="team.id">
-            <img class="w-full" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
+            <img class="" :src="`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${team.id}.svg`" :alt="team.name" />
           </div>
         </div>
         <!-- /end Y Teams -->
@@ -25,12 +25,12 @@
             class="border bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
           >
             <div v-if="answer.id">
-              <img class="w-full rounded-lg" :src="`https://cms.nhl.bamgrid.com/images/headshots/current/168x168/${answer.id}.jpg`" :alt="answer.name" />
+              <img class="rounded-lg" :src="`https://cms.nhl.bamgrid.com/images/headshots/current/168x168/${answer.id}.jpg`" :alt="answer.name" />
               <span>{{ answer.firstName }} {{ answer.lastName }}</span>
             </div>
           </button>
         </div>
-        <div class="col-span-1 h-full flex justify-center">
+        <div class="col-span-5 md:col-span-1 flex justify-center">
           <div class="flex flex-col justify-center items-center">
             <span class="text-6xl font-bold">{{ guesses }}</span>
             <span class="text-sm">Guesses</span>
