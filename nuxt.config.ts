@@ -14,6 +14,10 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss'
   ],
   nitro: {
+    routeRules: {
+      '/nhlPlayers/': { proxy: 'https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/' },
+      "/proxy/**": { proxy: '/api/**' },
+    },
     proxy: {
       '/nhlPlayers/': {
         target: 'https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/',
