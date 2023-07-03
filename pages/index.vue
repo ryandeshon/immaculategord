@@ -178,7 +178,7 @@ export default {
       // reset searchPlayersResults
       this.searchPlayersResults = []
 
-      $fetch(`nhlPlayers/${playerQuery}`)
+      $fetch(`/nhlPlayers/${playerQuery}`)
         .then(response => {
           console.log('🚀 ~ file: index.vue:185 ~ getPlayers ~ response:', response)
           return response
