@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="loaded">
     <div class="">
       <!-- X teams -->
       <div class="grid grid-cols-4 md:grid-cols-5 auto-rows-fr text-center">
@@ -96,6 +96,7 @@ export default {
   },
   data () {
     return {
+      loaded: false,
       showModal: false,
       noResults: false,
       searchQuery: '',
@@ -149,6 +150,7 @@ export default {
     if (localStorage.getItem('answers')) {
       this.answers = JSON.parse(localStorage.getItem('answers'))
     }
+    this.loaded = true
   },
   computed: {
   },
