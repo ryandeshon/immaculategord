@@ -13,22 +13,4 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss'
   ],
-  nitro: {
-    routeRules: {
-      '/nhlPlayers/': { proxy: 'https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/' },
-      "/proxy/**": { proxy: '/api/**' },
-    },
-    proxy: {
-      '/api/nhlPlayers/': {
-        target: 'https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/nhlPlayers/, ''),
-      },
-      '/api/teams': {
-        target: 'https://statsapi.web.nhl.com/api/v1/',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/teams/, ''),
-      },
-    }
-  },
 })

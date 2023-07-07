@@ -156,7 +156,7 @@ export default {
   },
   methods: {
     getRandomTeams () {
-      $fetch('/api/teams')
+      $fetch('https://statsapi.web.nhl.com/api/v1/teams')
         .then(response => {
           this.teams = response.data.teams
           // get 6 random teams from the list
@@ -180,7 +180,7 @@ export default {
       // reset searchPlayersResults
       this.searchPlayersResults = []
 
-      $fetch(`/api/nhlPlayers/${playerQuery}`)
+      $fetch(`https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/${playerQuery}`)
         .then(response => {
           console.log('🚀 ~ file: index.vue:185 ~ getPlayers ~ response:', response)
           return response
