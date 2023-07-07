@@ -22,11 +22,11 @@
             v-for="(answer, index) in answers" :key="index"
             :id="`square-${index}`"
             @click="openSearchModal(index)"
-            class="border bg-sky-300 hover:bg-sky-200 text-white font-bold py-2 px-4"
+            class="border bg-sky-300 hover:bg-sky-200 md:px-4 md:py-2"
           >
             <div v-if="answer.id">
-              <img class="rounded-lg" :src="`https://cms.nhl.bamgrid.com/images/headshots/current/168x168/${answer.id}.jpg`" :alt="answer.name" />
-              <span>{{ answer.firstName }} {{ answer.lastName }}</span>
+              <img class="md:rounded-lg" :src="`https://cms.nhl.bamgrid.com/images/headshots/current/168x168/${answer.id}.jpg`" :alt="answer.name" />
+              <span class="text-white font-bold text-xs md:text-sm">{{ answer.firstName }} {{ answer.lastName }}</span>
             </div>
           </button>
         </div>
